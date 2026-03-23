@@ -1,0 +1,38 @@
+[user]
+	name = Matthieu Marchal
+	email = matthieu.nh.marchal@gmail.com
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = cursor --wait
+
+[diff]
+	colorMoved = default
+
+[merge]
+	conflictstyle = diff3
+
+[alias]
+	s = status -sb
+	l = log --oneline -15
+	d = diff
+	ds = diff --staged
+	co = checkout
+	br = branch
+	cm = commit -m
+	amend = commit --amend --no-edit
+
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process

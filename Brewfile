@@ -1,0 +1,12 @@
+# Dev essentials
+brew "git"
+brew "gh"
+brew "fzf"
+brew "ripgrep"
+brew "fd"
+brew "bat"
+brew "eza"
+brew "zoxide"
+brew "jq"
+brew "tldr"
+brew "htop"
