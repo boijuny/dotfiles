@@ -30,8 +30,8 @@ alias gc="git commit"
 alias gp="git push"
 alias gpl="git pull"
 
-alias ls="eza --icons=auto 2>/dev/null || ls"
-alias ll="eza -la --icons=auto --git 2>/dev/null || ls -la"
+alias ls="eza 2>/dev/null || ls"
+alias ll="eza -la --git 2>/dev/null || ls -la"
 alias cat="bat --style=plain 2>/dev/null || cat"
 
 alias c="cursor ."
@@ -46,6 +46,9 @@ alias py="python"
 
 # zoxide (smart cd)
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
+# --- Prompt ---
+command -v starship >/dev/null && eval "$(starship init zsh)"
 
 # --- Knowledge capture ---
 til() { echo "- $(date +%H:%M) $*" >> ~/Documents/daily/$(date +%Y-%m-%d).md }

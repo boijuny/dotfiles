@@ -17,5 +17,7 @@ fi
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
 ln -sf "$DOTFILES_DIR/.gitignore_global" "$HOME/.gitignore_global"
+mkdir -p "$HOME/.config"
+ln -sf "$DOTFILES_DIR/starship.toml" "$HOME/.config/starship.toml"
 
 echo "Done. Restart your shell."
