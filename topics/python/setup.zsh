@@ -1,4 +1,5 @@
 # Conda initialize
+export CONDA_CHANGEPS1=false
 __conda_setup="$("$HOME/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"

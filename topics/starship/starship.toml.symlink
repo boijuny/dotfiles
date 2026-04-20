@@ -1,56 +1,22 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# --- Performance & Behavior ---
 add_newline = true
-command_timeout = 500
+command_timeout = 1000
 
-# --- Layout ---
-# Only show what matters: Where you are, Git state, and Python environment.
+# Standard multi-line layout for a clean typing area
 format = """
 $directory\
 $git_branch\
 $git_status\
+$conda\
 $python
 $character"""
 
 [character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
-
 [directory]
-style = "bold cyan"
-truncation_length = 3
-truncate_to_repo = true
-truncation_symbol = "…/"
-
+truncation_length = 2
 [git_branch]
-symbol = " "
-style = "bold purple"
-format = "on [$symbol$branch]($style) "
-
 [git_status]
-style = "bold red"
-# Minimal status: [!] or [?] instead of long strings
-format = '([\[$all_status$ahead_behind\]]($style) )'
-
 [python]
-symbol = "🐍 "
-style = "bold yellow"
-# Only show version and venv if we are actually in a python context
-format = 'via [${symbol}${version}( \($virtualenv\))]($style) '
-
-# --- Efficiency: Disable unused modules ---
-[package]
-disabled = true
-
-[nodejs]
-disabled = true
-
-[rust]
-disabled = true
-
-[golang]
-disabled = true
-
-[lua]
-disabled = true
+[conda]
+ignore_base = true
