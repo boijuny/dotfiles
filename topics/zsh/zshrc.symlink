@@ -1,0 +1,23 @@
+# Base .zshrc that loads modular topics
+DOTFILES_DIR="${${(%):-%x}:A:h:h}"
+
+# All of our .zsh files in the topics/ subfolders
+typeset -U config_files
+config_files=($DOTFILES_DIR/topics/**/*.zsh)
+
+# Load the path files
+for file in ${(M)config_files:#*/path.zsh}; do
+  source "$file"
+done
+
+# Load everything but the path and completion files
+for file in ${config_files:#*/(path|completion).zsh}; do
+  source "$file"
+done
+
+# Load completion files
+for file in ${(M)config_files:#*/completion.zsh}; do
+  source "$file"
+done
+
+unset config_files

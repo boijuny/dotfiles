@@ -1,4 +1,3 @@
-# Dev essentials
 brew "git"
 brew "gh"
 brew "fzf"

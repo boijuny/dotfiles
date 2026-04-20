@@ -3,6 +3,7 @@ add_newline = false
 
 format = """
 $conda\
+$python\
 $directory\
 $git_branch\
 $git_status\
@@ -35,3 +36,7 @@ style = "bold yellow"
 format = "[$environment]($style) "
 style = "bold green"
 ignore_base = true
+
+[python]
+format = "[$virtualenv]($style) "
+style = "bold yellow"

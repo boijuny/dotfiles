@@ -2,22 +2,54 @@
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+TOPICS_DIR="$DOTFILES_DIR/topics"
 
-# Install packages
-if [[ "$(uname)" == "Darwin" ]]; then
-    command -v brew >/dev/null || { echo "Install Homebrew first: https://brew.sh"; exit 1; }
-    brew bundle --file="$DOTFILES_DIR/Brewfile"
-elif [[ -f /etc/debian_version ]]; then
-    sudo apt update && sudo apt install -y git gh fzf ripgrep fd-find bat eza zoxide jq tldr htop
-elif [[ -f /etc/redhat-release ]]; then
-    sudo dnf install -y git gh fzf ripgrep fd-find bat eza zoxide jq tldr htop
+# Topics to install (default to all if none provided)
+SELECTED_TOPICS=("$@")
+if [[ ${#SELECTED_TOPICS[@]} -eq 0 ]]; then
+    SELECTED_TOPICS=($(ls "$TOPICS_DIR"))
 fi
 
-# Symlink configs
-ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
-ln -sf "$DOTFILES_DIR/.gitignore_global" "$HOME/.gitignore_global"
+echo "Installing topics: ${SELECTED_TOPICS[*]}"
+
+# Create essential directories
 mkdir -p "$HOME/.config"
-ln -sf "$DOTFILES_DIR/starship.toml" "$HOME/.config/starship.toml"
+
+for topic in "${SELECTED_TOPICS[@]}"; do
+    TOPIC_PATH="$TOPICS_DIR/$topic"
+    if [[ ! -d "$TOPIC_PATH" ]]; then
+        echo "Warning: Topic '$topic' not found. Skipping."
+        continue
+    fi
+
+    echo "--- Topic: $topic ---"
+
+    # 1. Install packages via Homebrew
+    if [[ "$(uname)" == "Darwin" ]] && [[ -f "$TOPIC_PATH/Brewfile" ]]; then
+        echo "Installing packages from $TOPIC_PATH/Brewfile..."
+        brew bundle --file="$TOPIC_PATH/Brewfile"
+    fi
+
+    # 2. Symlink configuration files
+    # Find all files ending in .symlink in this topic folder
+    for symlink_file in "$TOPIC_PATH"/*.symlink; do
+        [[ -e "$symlink_file" ]] || continue
+        
+        filename=$(basename "$symlink_file" .symlink)
+        target=""
+
+        case "$filename" in
+            "starship.toml")
+                target="$HOME/.config/starship.toml"
+                ;;
+            *)
+                target="$HOME/.$filename"
+                ;;
+        esac
+
+        echo "Linking $symlink_file to $target..."
+        ln -sf "$symlink_file" "$target"
+    done
+done
 
 echo "Done. Restart your shell."
