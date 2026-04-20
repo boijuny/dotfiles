@@ -1,5 +1,5 @@
 # Base .zshrc that loads modular topics
-DOTFILES_DIR="${${(%):-%x}:A:h:h}"
+DOTFILES_DIR="${${(%):-%x}:A:h:h:h}"
 
 # All of our .zsh files in the topics/ subfolders
 typeset -U config_files

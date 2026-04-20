@@ -1,7 +1,19 @@
-alias ls="eza 2>/dev/null || ls"
-alias ll="eza -la --git 2>/dev/null || ls -la"
-alias cat="bat --style=plain 2>/dev/null || cat"
+# Navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias -- -="cd -"
 
+# Core Tools (Human Readable & Safe)
+alias ls="eza --icons --group-directories-first 2>/dev/null || ls -F"
+alias ll="eza -la --git --icons --group-directories-first 2>/dev/null || ls -lahF"
+alias cat="bat --style=plain 2>/dev/null || cat"
+alias grep="grep --color=auto"
+alias df="df -h"
+alias du="du -sh"
+alias mkdir="mkdir -p"
+
+# Editor
 alias c="cursor ."
 alias z="zed ."
 

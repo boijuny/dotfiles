@@ -1,13 +1,16 @@
 "$schema" = 'https://starship.rs/config-schema.json'
-add_newline = false
 
+# --- Performance & Behavior ---
+add_newline = true
+command_timeout = 500
+
+# --- Layout ---
+# Only show what matters: Where you are, Git state, and Python environment.
 format = """
-$conda\
-$python\
 $directory\
 $git_branch\
 $git_status\
-$cmd_duration\
+$python
 $character"""
 
 [character]
@@ -18,25 +21,36 @@ error_symbol = "[❯](bold red)"
 style = "bold cyan"
 truncation_length = 3
 truncate_to_repo = true
+truncation_symbol = "…/"
 
 [git_branch]
-format = "[$branch]($style) "
+symbol = " "
 style = "bold purple"
+format = "on [$symbol$branch]($style) "
 
 [git_status]
-format = "[$all_status$ahead_behind]($style) "
 style = "bold red"
-
-[cmd_duration]
-min_time = 2_000
-format = "[$duration]($style) "
-style = "bold yellow"
-
-[conda]
-format = "[$environment]($style) "
-style = "bold green"
-ignore_base = true
+# Minimal status: [!] or [?] instead of long strings
+format = '([\[$all_status$ahead_behind\]]($style) )'
 
 [python]
-format = "[$virtualenv]($style) "
+symbol = "🐍 "
 style = "bold yellow"
+# Only show version and venv if we are actually in a python context
+format = 'via [${symbol}${version}( \($virtualenv\))]($style) '
+
+# --- Efficiency: Disable unused modules ---
+[package]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[rust]
+disabled = true
+
+[golang]
+disabled = true
+
+[lua]
+disabled = true

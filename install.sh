@@ -42,6 +42,12 @@ for topic in "${SELECTED_TOPICS[@]}"; do
             "starship.toml")
                 target="$HOME/.config/starship.toml"
                 ;;
+            "config")
+                target="$HOME/.gitconfig"
+                ;;
+            "ignore")
+                target="$HOME/.gitignore_global"
+                ;;
             *)
                 target="$HOME/.$filename"
                 ;;

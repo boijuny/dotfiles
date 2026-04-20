@@ -11,7 +11,18 @@ else
 fi
 unset __conda_setup
 
-alias py="python"
-alias uvi="uv init"
-alias uva="uv add"
-alias uvr="uv run"
+# Conda
+alias ca="conda activate"
+alias cd="conda deactivate"
+alias cl="conda env list"
+
+# Python
+alias p="python"
+alias pi="pip install"
+
+# UV (Fast Python Tooling)
+alias u="uv"
+alias ui="uv init"
+alias ua="uv add"
+alias ur="uv run"
+alias ux="uvx"
