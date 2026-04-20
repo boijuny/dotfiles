@@ -13,8 +13,8 @@ fi
 unset __conda_setup
 
 # Conda
-alias ca="conda activate"
-alias cd="conda deactivate"
+alias conac="conda activate"
+alias condac="conda deactivate"
 alias cl="conda env list"
 
 # Python

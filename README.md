@@ -20,12 +20,12 @@ For a minimal install, you can pass specific topics to `./install.sh`:
 <!-- TOPICS_START -->
 | Topic | Features | Tools/Apps |
 | :--- | :--- | :--- |
-| **apps** |  📦 Brewfile | zed |
-| **core** |  📦 Brewfile 🐚 Shell | git, gh, fzf, ripgrep, fd, ... |
-| **git** |  🐚 Shell 🔗 Symlinks | Aliases Config |
-| **python** |  📦 Brewfile 🐚 Shell | uv |
-| **starship** |  🔗 Symlinks |  |
-| **zsh** |  🔗 Symlinks |  |
+| **apps** |  📦 Brew | zed |
+| **core** |  📦 Brew 🐚 Zsh | git, gh, fzf, ripgrep, fd, ... |
+| **git** |  🐚 Zsh 🔗 Link | Config |
+| **python** |  📦 Brew 🐚 Zsh | uv |
+| **starship** |  🔗 Link | Config |
+| **zsh** |  🔗 Link | Config |
 <!-- TOPICS_END -->
 
 ## Adding a topic

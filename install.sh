@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Dotfiles Installer: Clean, Modular, and Robust.
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -10,52 +11,47 @@ if [[ ${#SELECTED_TOPICS[@]} -eq 0 ]]; then
     SELECTED_TOPICS=($(ls "$TOPICS_DIR"))
 fi
 
-echo "Installing topics: ${SELECTED_TOPICS[*]}"
+echo "🚀 Installing topics: ${SELECTED_TOPICS[*]}"
 
-# Create essential directories
-mkdir -p "$HOME/.config"
+# Helper for symlinking
+link_file() {
+    local src="$1"
+    local dst="$2"
+    echo "🔗 Linking $src -> $dst"
+    mkdir -p "$(dirname "$dst")"
+    ln -sf "$src" "$dst"
+}
 
 for topic in "${SELECTED_TOPICS[@]}"; do
     TOPIC_PATH="$TOPICS_DIR/$topic"
-    if [[ ! -d "$TOPIC_PATH" ]]; then
-        echo "Warning: Topic '$topic' not found. Skipping."
-        continue
-    fi
+    [[ -d "$TOPIC_PATH" ]] || { echo "⚠️ Topic '$topic' not found. Skipping."; continue; }
 
     echo "--- Topic: $topic ---"
 
-    # 1. Install packages via Homebrew
+    # 1. Package Installation (macOS only)
     if [[ "$(uname)" == "Darwin" ]] && [[ -f "$TOPIC_PATH/Brewfile" ]]; then
-        echo "Installing packages from $TOPIC_PATH/Brewfile..."
+        echo "📦 Bundling $topic packages..."
         brew bundle --file="$TOPIC_PATH/Brewfile"
     fi
 
-    # 2. Symlink configuration files
-    # Find all files ending in .symlink in this topic folder
-    for symlink_file in "$TOPIC_PATH"/*.symlink; do
-        [[ -e "$symlink_file" ]] || continue
-        
+    # 2. Automated Symlinking
+    # Finds all *.symlink files and maps them:
+    #   zshrc.symlink        -> ~/.zshrc
+    #   starship.toml.symlink -> ~/.config/starship.toml
+    #   gitconfig.symlink    -> ~/.gitconfig
+    find "$TOPIC_PATH" -name "*.symlink" | while read -r symlink_file; do
         filename=$(basename "$symlink_file" .symlink)
-        target=""
-
+        
         case "$filename" in
-            "starship.toml")
-                target="$HOME/.config/starship.toml"
-                ;;
-            "config")
-                target="$HOME/.gitconfig"
-                ;;
-            "ignore")
-                target="$HOME/.gitignore_global"
-                ;;
-            *)
-                target="$HOME/.$filename"
-                ;;
+            "starship.toml") target="$HOME/.config/starship.toml" ;;
+            "zshrc")         target="$HOME/.zshrc" ;;
+            "gitconfig")     target="$HOME/.gitconfig" ;;
+            "gitignore_global") target="$HOME/.gitignore_global" ;;
+            *)               target="$HOME/.$filename" ;;
         esac
 
-        echo "Linking $symlink_file to $target..."
-        ln -sf "$symlink_file" "$target"
+        link_file "$symlink_file" "$target"
     done
 done
 
-echo "Done. Restart your shell."
+echo "✅ Done. Restart your shell."

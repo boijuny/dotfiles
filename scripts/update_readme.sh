@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # scripts/update_readme.sh - Automatically updates README.md with a table of dotfile topics
 
+# Get dotfiles root
 DOTFILES_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 README="$DOTFILES_DIR/README.md"
 TOPICS_DIR="$DOTFILES_DIR/topics"
@@ -23,9 +24,9 @@ for topic in $(ls "$TOPICS_DIR" | sort); do
     TOOLS=""
 
     # Detect features
-    [[ -f "$TOPIC_PATH/Brewfile" ]] && FEATURES="$FEATURES 📦 Brewfile"
-    [[ -n $(ls "$TOPIC_PATH"/*.zsh 2>/dev/null) ]] && FEATURES="$FEATURES 🐚 Shell"
-    [[ -n $(ls "$TOPIC_PATH"/*.symlink 2>/dev/null) ]] && FEATURES="$FEATURES 🔗 Symlinks"
+    [[ -f "$TOPIC_PATH/Brewfile" ]] && FEATURES="$FEATURES 📦 Brew"
+    [[ -n $(ls "$TOPIC_PATH"/*.zsh 2>/dev/null) ]] && FEATURES="$FEATURES 🐚 Zsh"
+    [[ -n $(ls "$TOPIC_PATH"/*.symlink 2>/dev/null) ]] && FEATURES="$FEATURES 🔗 Link"
 
     # Extract tools from Brewfile
     if [[ -f "$TOPIC_PATH/Brewfile" ]]; then
@@ -35,7 +36,7 @@ for topic in $(ls "$TOPICS_DIR" | sort); do
     else
         # Fallback to key aliases or files
         [[ -f "$TOPIC_PATH/aliases.zsh" ]] && TOOLS="Aliases"
-        [[ -f "$TOPIC_PATH/config.symlink" ]] && TOOLS="$TOOLS Config"
+        [[ -n $(ls "$TOPIC_PATH"/*.symlink 2>/dev/null) ]] && TOOLS="Config"
     fi
 
     # Append row
@@ -46,7 +47,6 @@ done
 START_MARKER="<!-- TOPICS_START -->"
 END_MARKER="<!-- TOPICS_END -->"
 
-# Create a temporary file with the updated content
 {
     sed -n "1,/$START_MARKER/p" "$README"
     echo -e "$TABLE"
@@ -54,4 +54,4 @@ END_MARKER="<!-- TOPICS_END -->"
 } > "$README.tmp"
 
 mv "$README.tmp" "$README"
-echo "README.md updated with topic table."
+echo "✅ README.md updated."

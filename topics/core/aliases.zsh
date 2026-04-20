@@ -1,10 +1,10 @@
-# Navigation
+# Core Aliases
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias -- -="cd -"
 
-# Core Tools (Human Readable & Safe)
+# Core Tools (Modern Alternatives)
 alias ls="eza --icons --group-directories-first 2>/dev/null || ls -F"
 alias ll="eza -la --git --icons --group-directories-first 2>/dev/null || ls -lahF"
 alias cat="bat --style=plain 2>/dev/null || cat"

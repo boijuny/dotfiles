@@ -1,11 +1,42 @@
-# Base .zshrc that loads modular topics
-# Use the physical path of this script to find the dotfiles root
-DOTFILES_DIR="$(dirname "$(dirname "$(dirname "$(readlink -f "${(%):-%x}")")")")"
+# Modular .zshrc
+# --- Configuration ---
+# Get the absolute root path of the dotfiles repo
+# :A resolves symlinks, :h:h:h gets the root directory from /topics/zsh/zshrc.symlink
+export DOTFILES="${${(%):-%x}:A:h:h:h}"
 
-# Load all *.zsh files in topics/ subfolders
-# We use a simple loop for maximum compatibility and speed
-for topic_file in "$DOTFILES_DIR"/topics/**/*.zsh; do
-    [ -f "$topic_file" ] && source "$topic_file"
+# Clean up any broken aliases from the current session
+unalias cd 2>/dev/null
+
+# --- Topic Loader ---
+# Load order:
+# 1. path.zsh (binary locations/exports)
+# 2. *.zsh (aliases, logic, initializations)
+# 3. completion.zsh (shell completions)
+
+# Path files
+for f in "$DOTFILES"/topics/**/path.zsh(N); do
+    source "$f"
 done
 
-unset topic_file
+# General Zsh files (excluding path/completion)
+for f in "$DOTFILES"/topics/**/*.zsh(N); do
+    [[ "$f" == */path.zsh || "$f" == */completion.zsh ]] && continue
+    source "$f"
+done
+
+# Completion files
+for f in "$DOTFILES"/topics/**/completion.zsh(N); do
+    source "$f"
+done
+
+# --- Tool Initializations ---
+# These are placed here for speed and reliability
+[[ -f /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+command -v starship >/dev/null && eval "$(starship init zsh)"
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
+# fzf keybindings
+[[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+[[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ]] && source /opt/homebrew/opt/fzf/shell/completion.zsh
+
+unset f
